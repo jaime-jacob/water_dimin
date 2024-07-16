@@ -2,3 +2,10 @@
 chroma_*
 chroma
 .DS_Store
+penv/
+venv/
+.penv/
+.venv/
+.conda/
+envs/
+water_relinq_stats.csv

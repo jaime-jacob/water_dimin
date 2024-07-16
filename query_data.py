@@ -1,51 +1,67 @@
 import argparse
+import os
 # from dataclasses import dataclass
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
+from whyhow_rbr import Client, Rule, IndexNotFoundException
+from pinecone import Pinecone, ServerlessSpec
+from convert_to_pdf import txt_to_pdf
+import create_index
 
-CHROMA_PATH = "chroma"
-
-PROMPT_TEMPLATE = """
-Answer the question based only on the following context:
-
-{context}
-
----
-
-Answer the question based on the above context: {question}
-"""
+# TODO: replace with your API key
+os.environ['OPENAI_API_KEY'] = "your_api_key"
+os.environ['PINECONE_API_KEY'] = "your_api_key"
 
 
 def main():
-    # Create CLI.
+    # Create Command line interface
     parser = argparse.ArgumentParser()
     parser.add_argument("query_text", type=str, help="The query text.")
     args = parser.parse_args()
     query_text = args.query_text
 
-    # Prepare the DB.
-    embedding_function = OpenAIEmbeddings()
-    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
+    water_right_no = "1000A"
 
-    # Search the DB.
-    results = db.similarity_search_with_relevance_scores(query_text, k=3)
-    if len(results) == 0 or results[0][1] < 0.7:
-        print(f"Unable to find matching results.")
-        return
+    if "water certificate no." in query_text:
+        query_text_split = query_text.strip()
+        query_text_split = query_text.split('.')
+        print(query_text_split)
+        water_right_no = query_text_split[1]
+        water_right_no = water_right_no.replace('?', "")
+        print('Water right no:', water_right_no)
 
-    context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
-    prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-    prompt = prompt_template.format(context=context_text, question=query_text)
-    print(prompt)
+  
+
+    rule = Rule(
+        filename='data/water_pdfs/franklin_add_acreage.pdf',
+        #keywords=[water_right_no]
+    )
 
     model = ChatOpenAI()
-    response_text = model.predict(prompt)
 
-    sources = [doc.metadata.get("source", None) for doc, _score in results]
-    formatted_response = f"Response: {response_text}\nSources: {sources}"
-    print(formatted_response)
+    index_name = "water-diminishment"
+    namespace = "docs"
+    client = Client()
+    try:
+        index = client.get_index(index_name)
+    except IndexNotFoundException:
+        create_index.main()
+
+    response_text = client.query(
+        question=query_text,
+        index=index,
+        namespace=namespace,
+        rules=[rule],
+        keyword_trigger=True
+    )
+
+    #print(formatted_response)
+
+    print("\n\nQuestion:", query_text)
+    print("\nAnswer:", response_text['answer'], "\n")
+    print("\nMatches:" , response_text['matches'], "\n")
 
 
 if __name__ == "__main__":
