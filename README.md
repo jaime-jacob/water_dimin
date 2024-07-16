@@ -10,11 +10,11 @@ Attempting to use Open AI's API and Pinecone Vectorized database with WhyHow rul
   
 **2. Convert to TXT Files**  
 
- Using AWS's OCR technology to convert the PDFs to TXT files  
+ Using [AWS's OCR](https://aws.amazon.com/textract/) technology to convert the PDFs to TXT files  
  The PDFs are scanned images, hence the need for OCR and the inability to use PDF loader packages in Python like PyPDFLoader from LangChain  
   
 **3. Create_index.py**   
- Vectorizes the text in your files and uploads them to a Pinecone database  
+ Vectorizes the text in your files and uploads them to a [Pinecone database](https://www.pinecone.io/)  
  Be sure to go through and replace the API keys with your personal API keys  
  Using CLI:  
   

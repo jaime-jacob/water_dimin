@@ -9,3 +9,5 @@ venv/
 .conda/
 envs/
 water_relinq_stats.csv
+data/
+original_pdfs/
