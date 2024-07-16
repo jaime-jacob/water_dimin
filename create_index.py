@@ -76,5 +76,4 @@ def list_documents(directory):
     return documents
 
 if __name__ == "__main__":
-    #list_documents("data/water_docs")
     main()
