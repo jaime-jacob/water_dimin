@@ -1,8 +1,10 @@
 import os
 
 # TODO: replce with your api key
-os.environ['OPENAI_API_KEY'] = "your_api_key"
-os.environ['PINECONE_API_KEY'] = "your_api_key"
+# os.environ['OPENAI_API_KEY'] = "your_api_key"
+# os.environ['PINECONE_API_KEY'] = "your_api_key"
+openai_api_key = os.getenv("OPENAI_API_KEY")
+pinecone_api_key = os.getenv("PINECONE_API_KEY")
 
 from convert_to_pdf import txt_to_pdf
 from whyhow_rbr import Client, Rule, IndexNotFoundException
