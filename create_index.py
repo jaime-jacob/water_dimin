@@ -18,24 +18,25 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("input_dir", type=str, help="The input directory.")
+    parser.add_argument("output_dir", type=str, help="The output directory.")
+
     args = parser.parse_args()
     input_dir = args.input_dir
     print("Input_dir:", input_dir)
-
-    parser.add_argument("output_dir", type=str, help="The output directory.")
-    args = parser.parse_args()
     output_dir = args.output_dir
     print("Output_dir:", output_dir)
 
 
 
     docs = list_documents(input_dir)
+    docs_to_embed = []
     for doc in docs:
         filename = input_dir + "/" + doc
-        txt_to_pdf(input=filename, output_dir=output_dir)
+        docs_to_embed.append(txt_to_pdf(input=filename, output_dir=output_dir))
     
-    docs_to_embed = list_documents(output_dir)
-    print(docs_to_embed)
+    print("DOCS TO EMBED:", docs_to_embed)
+   # docs_to_embed = list_documents(output_dir)
+   # print(docs_to_embed)
 
          
 
@@ -45,9 +46,9 @@ def main():
     # docs = ["test1.pdf"]
     client = Client()
 
+
     try:
             index = client.get_index(index_name)
-            # index.delete(delete_all=True, namespace=namespace)
 
             # logger.info(f"Index {index_name} already exists, reusing it")
     except IndexNotFoundException:
@@ -66,7 +67,8 @@ def main():
         index = client.get_index(index_name)
 
             # logger.info(f"Index {index_name} created")
-    #client.upload_documents(index=index, documents=docs_to_embed, namespace=namespace)
+    #delete_index(index_name, namespace)
+    client.upload_documents(index=index, documents=docs_to_embed, namespace=namespace)
 
 
 def list_documents(directory):
@@ -76,6 +78,12 @@ def list_documents(directory):
             documents.append(filename)
     print(documents)
     return documents
+
+def delete_index(index_name, namespace):
+    client = Client()
+    index = client.get_index(index_name)
+    index.delete(delete_all=True, namespace=namespace)
+
 
 if __name__ == "__main__":
     main()

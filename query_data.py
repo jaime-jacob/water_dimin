@@ -23,7 +23,8 @@ def main():
     parser.add_argument("query_text", type=str, help="The query text.")
     args = parser.parse_args()
     query_text = args.query_text
-    execute_query('data/water_pdfs/franklin_add_acreage.pdf', query_text)
+    print('HELLO')
+    execute_query('data/water_pdfs/franklin_add_acreage.pdf', query_text, show_matches=True)
 
     # water_right_no = "1000A"
 
@@ -41,6 +42,8 @@ def main():
 
 
 def execute_query(filename, query_text, show_matches=False):
+    #print('Filename:', filename)
+    #print('Query text:', query_text)
     rule = Rule(
         filename=filename
         #keywords=[water_right_no]
@@ -64,7 +67,7 @@ def execute_query(filename, query_text, show_matches=False):
         # keyword_trigger=True
     )
 
-    print("\n\nQuestion:", query_text)
+    print("\nQuestion:", query_text)
     print("\nAnswer:", response_text['answer'], "\n")
     if show_matches:
         print("\nMatches:" , response_text['matches'], "\n")
