@@ -12,3 +12,8 @@ water_relinq_stats.csv
 data/
 original_pdfs/
 output.txt
+textract_output/
+textract_pdfs/
+water_relinq_stats_accepted.csv
+water_relinq_stats_current.csv
+water_relinq_stats_existing.csv

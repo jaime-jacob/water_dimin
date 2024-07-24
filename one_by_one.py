@@ -17,22 +17,20 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("input_dir", type=str, help="The input directory.")
     parser.add_argument("output_csv", type=str, help="The output CSV file path.")
+    parser.add_argument("namespace", type=str, help="The namespace within the pinecone DB.")
+
     args = parser.parse_args()
     input_dir = args.input_dir
-    output_csv = args.output_csv
+    output_csv_path = args.output_csv
+    namespace = args.namespace
     print("Input_dir:", input_dir)
-    print("Output CSV:", output_csv)
+    print("Output CSV:", output_csv_path)
+    print('Namespace:', namespace)
+
 
     docs = create_index.list_documents(input_dir)
 
-    print(docs)
-
-    for doc in docs:
-        # TODO: Need to tailor prompt to find a query that works for every (or nearly every) doc
-        query_text = "What is the existing maximum acre-feet/yr?"
-        filepath = os.path.join(input_dir, doc)
-        print('\n\nNEW QUERY:', filepath)
-        query_data.execute_query(filename=filepath, query_text=query_text)
+    execute_batch(input_dir=input_dir, output_csv_path=output_csv_path, docs=docs, namespace=namespace)    
 
 
 def trying_unstuctured():
@@ -119,6 +117,35 @@ def print_table_as_html(table_elem, filename):
     file_path = os.path.abspath(filename)
     webbrowser.open('file://' + file_path, new=2) 
 
+
+def execute_batch(input_dir: str, output_csv_path: str, docs: list, namespace:str):
+
+    # Create dataframe to store answers
+    df = pd.DataFrame(columns=["DOCUMENT_NAME", "QUERY", "ANSWER"])
+
+    print(docs)
+
+    for doc in docs:
+        # TODO: Need to tailor prompt to find a query that works for every (or nearly every) doc
+        query_text = "Was the proposal accepted?"
+        filepath = os.path.join(input_dir, doc)
+        print('\n\nNEW QUERY:', filepath)
+        # if os.path.isdir(filepath):
+        #     for entry in create_index.list_documents(filepath):
+        #         if entry == 'rawText.txt':
+        #             filepath = os.path.join(filepath, entry)
+        #             print('FILEPATH:', filepath)
+        #             break
+        if os.path.isdir(filepath):
+            print('Error: Raw Text File not Found')
+            continue
+        output = query_data.execute_query(filename=filepath, query_text=query_text, namespace=namespace)
+
+        # Add answer to dataframe
+        new_row = {'DOCUMENT_NAME': doc, 'QUERY': query_text, "ANSWER": output}
+        df.loc[len(df)] = new_row
+    
+    df.to_csv(output_csv_path)
 
 
 

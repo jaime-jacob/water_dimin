@@ -41,7 +41,7 @@ def main():
   
 
 
-def execute_query(filename, query_text, show_matches=False):
+def execute_query(filename, query_text, namespace, show_matches=False):
     #print('Filename:', filename)
     #print('Query text:', query_text)
     rule = Rule(
@@ -52,7 +52,7 @@ def execute_query(filename, query_text, show_matches=False):
     # model = ChatOpenAI()
 
     index_name = "water-diminishment"
-    namespace = "docs"
+    # namespace = "docs"
     client = Client()
     try:
         index = client.get_index(index_name)
@@ -71,6 +71,8 @@ def execute_query(filename, query_text, show_matches=False):
     print("\nAnswer:", response_text['answer'], "\n")
     if show_matches:
         print("\nMatches:" , response_text['matches'], "\n")
+
+    return(response_text['answer'])
 
 
 
