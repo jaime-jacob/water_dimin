@@ -106,7 +106,7 @@ def main():
                                 actual=actual_dimin, 
                                 output=output_file)
     
-    print(compare_accuracy.calculate_accuracy(output_file))
+    print('Final Accuracy:', compare_accuracy.calculate_accuracy(output_file))
     
     # Clean Up
     if clean_up:
