@@ -16,3 +16,12 @@ textract_pdfs/
 water_relinq_stats/
 Diminishment_Franklin_Cty.csv
 test_out.csv
+accepted_answer.csv
+existing_answer.csv
+proposed_answer.csv
+temp_water_diff.csv
+franklin_test/
+temp_indexed/
+temp_output_directory/
+test_in/
+test_outputdir/

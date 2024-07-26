@@ -6,7 +6,7 @@ import argparse
 import query_data
 import unstructured_client
 from unstructured_client.models import operations, shared
-import pandas as pd
+import pandas as pd # type: ignore
 from bs4 import BeautifulSoup
 import webbrowser
 
@@ -30,7 +30,7 @@ def main():
 
     docs = create_index.list_documents(input_dir)
 
-    execute_batch(input_dir=input_dir, output_csv_path=output_csv_path, docs=docs, namespace=namespace)    
+    query_data.execute_batch(input_dir=input_dir, output_csv_path=output_csv_path, docs=docs, namespace=namespace)    
 
 
 def trying_unstuctured():
@@ -103,10 +103,6 @@ def print_table_as_html(table_elem, filename):
         # Print the styled HTML
         print(styled_html)
         
-        # Optionally, save to a file
-        # filename = filename.split('.')
-        # filename = filename[0]
-        # filename = filename+ ".html"
         filename = element_id + ".html"
         with open(filename, "w", encoding="utf-8") as f:
             f.write(styled_html)
@@ -116,39 +112,6 @@ def print_table_as_html(table_elem, filename):
 
     file_path = os.path.abspath(filename)
     webbrowser.open('file://' + file_path, new=2) 
-
-
-def execute_batch(input_dir: str, output_csv_path: str, docs: list, namespace:str):
-
-    # Create dataframe to store answers
-    df = pd.DataFrame(columns=["DOCUMENT_NAME", "QUERY", "ANSWER"])
-
-    print(docs)
-
-    for doc in docs:
-        # TODO: Need to tailor prompt to find a query that works for every (or nearly every) doc
-        query_text = "Was the proposal accepted?"
-        filepath = os.path.join(input_dir, doc)
-        print('\n\nNEW QUERY:', filepath)
-        # if os.path.isdir(filepath):
-        #     for entry in create_index.list_documents(filepath):
-        #         if entry == 'rawText.txt':
-        #             filepath = os.path.join(filepath, entry)
-        #             print('FILEPATH:', filepath)
-        #             break
-        if os.path.isdir(filepath):
-            print('Error: Raw Text File not Found')
-            continue
-        output = query_data.execute_query(filename=filepath, query_text=query_text, namespace=namespace)
-
-        # Add answer to dataframe
-        new_row = {'DOCUMENT_NAME': doc, 'QUERY': query_text, "ANSWER": output}
-        df.loc[len(df)] = new_row
-    
-    df.to_csv(output_csv_path)
-
-
-
 
 
 if __name__ == "__main__":

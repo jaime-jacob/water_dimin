@@ -27,14 +27,11 @@ def main():
 
 def find_diff(predicted_diff:int, actual_diff:int):
 
-    # predicted_diff = predicted_df[predicted_line, 'WATER_DIMINISHMENT']
-    # actual_diff = actual_df.at[actual_line, '"Diminishment_Qa"']
-
     try:
         predicted_diff = float(predicted_diff)
         actual_diff = float(actual_diff)
     except ValueError:
-        print('Unable to Calculate Difference')
+        print('Error compare_accuracy.py: Unable to Calculate Difference')
         return False
 
     diff = predicted_diff - actual_diff
@@ -43,18 +40,18 @@ def find_diff(predicted_diff:int, actual_diff:int):
 
 
 def find_matching_rownum(df:pd.DataFrame, key:str, value:str):
-    print(f'Key:{key} | Value:{value}')
+    #print(f'Key:{key} | Value:{value}')
     value = value.strip().strip('"')
     # indices = df[df[key] == value].index
     # indices = df.query('column_name == @value').index.tolist()
     index = df.index[df[key] == value].tolist()
-    print(df[df[key] == value])
+    #print(df[df[key] == value])
     if len(index) == 0:
         return None
     
     # Return the row number as an int (assuming the first match)
     # row_number = indices[0]
-    print('INDEX', index[0])
+    #print('INDEX', index[0])
     return int(index[0])
 
 
@@ -66,7 +63,7 @@ def one_row(predicted_df:pd.DataFrame, predicted_line:int,
     actual_line = find_matching_rownum(actual_df, 'DocID', doc_name)
 
     if not actual_line:
-        print('No matching document:', doc_name)
+        print('Error compare_accuracy.py: No matching document:', doc_name)
         return None
 
     predicted_diff = predicted_df.at[predicted_line, 'WATER_DIMINISHMENT']

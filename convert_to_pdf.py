@@ -18,7 +18,7 @@ def replace_unsupported_chars(text):
 def txt_to_pdf(input:str, output_dir:str, output_name:str):
     extension = input.split('.')[1]
     if extension != 'txt':
-        print('ERROR: Convert_to_pdf.py - not a TXT file')
+        print('Error convert_to_pdf.py: not a TXT file')
         return(None)
 
     # Create instance of FPDF class
@@ -42,65 +42,16 @@ def txt_to_pdf(input:str, output_dir:str, output_name:str):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
         print(f"Directory '{output_dir}' created.")
-    # else:
-    #     print(f"Directory '{output_dir}' already exists.")
+
     output_file = f"{output_dir}/output.pdf"
     pdf.output(output_file)
 
-        
-    # output = input.split('/')
-    # output = input.split('.')
-    print('Output_name:', output_name)
     output_name = output_name + ".pdf"
-    # output = output.split('/')
-    # output = output[len(output) - 1]
+
     output_file = output_dir + "/" + output_name
-    print("Output file name:", output_file)
+    # output_file = output_file.replace('_', '*')
     pdf.output(output_file) 
-
-
-    return(output_file)
 
     return output_file
 
-# def txt_to_pdf(input:str, output_dir="data/water_pdfs"):
-#     pdf = FPDF() 
 
-#     # Error checking, must be a txt file 
-#     extension = input.split('.')[1]
-#     if extension != 'txt':
-#         print('ERROR: Convert_to_pdf.py - not a TXT file')
-#         return(None)
-
-#     # Add a page
-#     pdf.add_page()
-
-#     # set style and size of font 
-#     # that you want in the pdf
-#     pdf.set_font("Arial", size = 10)
-
-#     # open the text file in read mode
-#     f = open(input, "r", encoding='utf-8')
-
-#     # insert the texts in pdf
-#     for x in f:
-#         pdf.cell(200, 10, txt = x, ln = 1, align = 'L')
-
-#     # save the pdf with name .pdf
-#     if not os.path.exists(output_dir):
-#         os.makedirs(output_dir)
-#         print(f"Directory '{output_dir}' created.")
-#     # else:
-#     #     print(f"Directory '{output_dir}' already exists.")
-    
-#     output = input.split('/')
-#     output = output[2].split('.')
-#     output = output[0] + ".pdf"
-#     output_file = output_dir + "/" + output
-#     print("Output file name:", output_file)
-#     pdf.output(output_file) 
-
-
-#     return(output_file)
-
-#txt_to_pdf("data/water_docs/adams_county.txt", "data/water_pdfs")

@@ -16,6 +16,11 @@ def main():
     print("Input File:", input_file)
     print('Output File:', output_file)
 
+    whole_file(input_file, output_file)
+
+    
+        
+def whole_file(input_file:str, output_file:str):
     df = pd.read_csv(input_file)
     for index, row in df.iterrows():
         print(f'\n\nIndex: {index}')
@@ -25,7 +30,7 @@ def main():
         append_to_csv_line_pandas(df, index, numbers)
 
     df.to_csv(output_file)
-        
+
 
 def append_to_csv_line_pandas(df:pd.DataFrame, line_number:int, data_to_append:list):
     # Read the CSV file into a DataFrame

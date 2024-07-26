@@ -53,7 +53,7 @@ def find_resulting_acreage(existing:pd.DataFrame, proposed:pd.DataFrame, accepte
    # print('Proposed Document Name', proposed_doc)
     accepted_doc = str(accepted.at[line_number, 'DOCUMENT_NAME']).strip()
    # print('Accepted Document Name', accepted_doc)
-    print(f'Existing: {existing_doc}  |  Proposed: {proposed_doc}  |  Accepted: {accepted_doc}')
+    #print(f'Existing: {existing_doc}  |  Proposed: {proposed_doc}  |  Accepted: {accepted_doc}')
     if existing_doc != proposed_doc or existing_doc != accepted_doc or accepted_doc != accepted_doc:
         final = 'Not the same document, cannot calculate'
         return(final)
@@ -113,7 +113,7 @@ def run_whole_file(existing:str, proposed:str, accepted:str, output_file:str):
     if (len(existing_df) != len(proposed_df) or 
         len(existing_df) != len(accepted_df) or 
         len(proposed_df) != len(accepted_df)):
-        print('DIFF LENGTH FILES, RETURNING')
+        print('Error calc_water_diminishment.py: DIFF LENGTH FILES, RETURNING')
         return
 
     for index, _ in existing_df.iterrows():

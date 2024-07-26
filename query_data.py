@@ -1,14 +1,11 @@
 import argparse
 import os
-# from dataclasses import dataclass
 from langchain_community.vectorstores import Chroma
-# from langchain_openai import OpenAIEmbeddings
-# from langchain_openai import ChatOpenAI
-# from langchain.prompts import ChatPromptTemplate
 from whyhow_rbr import Client, Rule, IndexNotFoundException
 from pinecone import Pinecone, ServerlessSpec
 from convert_to_pdf import txt_to_pdf
 import create_index
+import pandas as pd # type: ignore
 
 # TODO: replace with your API key
 # os.environ['OPENAI_API_KEY'] = "your_api_key"
@@ -25,20 +22,6 @@ def main():
     query_text = args.query_text
     print('HELLO')
     execute_query('data/water_pdfs/franklin_add_acreage.pdf', query_text, show_matches=True)
-
-    # water_right_no = "1000A"
-
-    # if "water certificate no." in query_text:
-    #     query_text_split = query_text.strip()
-    #     query_text_split = query_text.split('.')
-    #     print(query_text_split)
-    #     water_right_no = query_text_split[1]
-    #     water_right_no = water_right_no.replace('?', "")
-    #     print('Water right no:', water_right_no)
-    
-    #print(formatted_response)
-
-  
 
 
 def execute_query(filename, query_text, namespace, show_matches=False):
@@ -75,6 +58,27 @@ def execute_query(filename, query_text, namespace, show_matches=False):
     return(response_text['answer'])
 
 
+def execute_batch(input_dir: str, output_csv_path: str, docs: list, namespace:str, query:str):
+
+    # Create dataframe to store answers
+    df = pd.DataFrame(columns=["DOCUMENT_NAME", "QUERY", "ANSWER"])
+
+    print(docs)
+
+    for doc in docs:
+        filepath = os.path.join(input_dir, doc)
+        print('\n\nNEW QUERY:', filepath)
+
+        if os.path.isdir(filepath):
+            print('Error query_data.py: Raw Text File not Found')
+            continue
+        output = execute_query(filename=filepath, query_text=query, namespace=namespace)
+
+        # Add answer to dataframe
+        new_row = {'DOCUMENT_NAME': doc, 'QUERY': query, "ANSWER": output}
+        df.loc[len(df)] = new_row
+    
+    df.to_csv(output_csv_path)
 
 if __name__ == "__main__":
     main()
