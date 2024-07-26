@@ -21,7 +21,8 @@ Attempting to use Open AI's API and Pinecone Vectorized database with WhyHow rul
 
  A Pinecone API key as well as an OpenAI API key are required before running.  
  Set these in your local environment as so:  
-   `export PINECONE_API_KEY="your_pinecone_api_key_here"`  
+
+   export PINECONE_API_KEY="your_pinecone_api_key_here" 
    `export OPENAI_API_KEY="your_openai_api_key_here"`  
 
  Required arguments:  
@@ -35,10 +36,10 @@ Attempting to use Open AI's API and Pinecone Vectorized database with WhyHow rul
   -c, --clean_up        Remove temporary files and directories created during runtime.  
   
   
- EX.
+ EX.  
    `python3 all.py -i example_input_directory -o example_output.csv -pn example_namespace -a example_diminishment_calc.csv -c`  
   
-EX.  
+ EX.  
    `python3 all.py --input example_input_directory --output example_output.csv --pinecone_namespace example_namespace --actual example_diminishment_calc.csv --clean_up`  
   
  The output file is created with the name of the document, the chatbot-predicted water diminishment calculations, the hand-calculated water diminishment, the difference between the two, and whether or not they are the same.  
