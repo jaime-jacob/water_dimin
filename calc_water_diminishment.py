@@ -2,6 +2,7 @@ import os
 import re
 import pandas as pd # type: ignore
 import argparse
+import compare_accuracy
 
 def main():
     parser = argparse.ArgumentParser()

@@ -8,10 +8,11 @@ venv/
 .venv/
 .conda/
 envs/
-water_relinq_stats.csv
 data/
 original_pdfs/
 output.txt
 textract_output/
 textract_pdfs/
 water_relinq_stats/
+Diminishment_Franklin_Cty.csv
+test_out.csv
