@@ -21,8 +21,8 @@ Attempting to use Open AI's API and Pinecone Vectorized database with WhyHow rul
 
  A Pinecone API key as well as an OpenAI API key are required before running.  
  Set these in your local environment as so:  
-   `export PINECONE_API_KEY="your_pinecone_api_key_here"`
-   `export OPENAI_API_KEY="your_openai_api_key_here"`
+   `export PINECONE_API_KEY="your_pinecone_api_key_here"`  
+   `export OPENAI_API_KEY="your_openai_api_key_here"`  
 
  Required arguments:  
   -i INPUT, --input INPUT        The input directory. Should contain TXT files.  
