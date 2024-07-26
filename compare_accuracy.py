@@ -97,7 +97,13 @@ def whole_file(predicted:str, actual:str, output:str):
         one_row(predicted_df, index, actual_df, output_df)
     
     output_df.to_csv(output)
-    
+
+
+def calculate_accuracy(filename:str):
+
+    df = pd.read_csv(filename)
+    true_count = df['SAME'].sum()
+    return(true_count / len(df))
 
 if __name__ == "__main__":
     main()
