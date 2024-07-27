@@ -11,11 +11,19 @@ import compare_accuracy
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--input", type=str, help="The input directory. Should contain TXT files.")
-    parser.add_argument("-o", "--output", type=str, help="The output file. Should be a CSV.")
-    parser.add_argument("-a", "--actual", type=str, help="The file with the actual water diminishment for comparison. Should be a CSV.")
-    parser.add_argument("-pn", "--pinecone_namespace", type=str, help="Namespace for Pinecone DB.")
-    parser.add_argument('-c', '--clean_up', action='store_true',  help='Remove temporary files created during runtime.', default=False)
+    parser.add_argument("-i", "--input", type=str, 
+                        help="The input directory. Should contain TXT files.")
+    parser.add_argument("-o", "--output", type=str, 
+                        help="The output file. Should be a CSV.")
+    parser.add_argument("-a", "--actual", type=str, 
+                        help="The file with the actual water diminishment for comparison. Should be a CSV.")
+    parser.add_argument("-pn", "--pinecone_namespace", type=str, 
+                        help="Namespace for Pinecone DB.")
+    parser.add_argument('-c', '--clean_up', action='store_true',  
+                        help='Remove temporary files created during runtime.', default=False)
+    parser.add_argument('-no', '--no_index', action='store_false',  
+                        help='Skip creating an index - useful when one is already created in this namespace.', default=True)
+
 
     args = parser.parse_args()
     input_dir = args.input
@@ -23,6 +31,7 @@ def main():
     pinecone_namespace = args.pinecone_namespace
     actual_dimin = args.actual
     clean_up = args.clean_up
+    index = args.no_index
 
 
     if not input_dir:
@@ -58,9 +67,10 @@ def main():
     temp_accepted_file = 'accepted_answer.csv'
     temp_predicted = 'temp_water_diff.csv'
 
-    create_index.create_index_in_pinecone(input_dir=input_dir, 
-                             output_dir=temp_indexed, 
-                             namespace=pinecone_namespace)
+    if index:
+        create_index.create_index_in_pinecone(input_dir=input_dir, 
+                                output_dir=temp_indexed, 
+                                namespace=pinecone_namespace)
     
     # Run through files and query them
 
@@ -116,7 +126,7 @@ def main():
         os.remove(temp_predicted)
         shutil.rmtree(temp_indexed)
 
-    print('Done comparing accuracy of this machine!')
+    print('\nDone comparing accuracy of this machine!\n')
 
 
 if __name__ == "__main__":
